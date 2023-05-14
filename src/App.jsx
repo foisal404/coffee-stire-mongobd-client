@@ -59,8 +59,8 @@ function App() {
     });
   };
   return (
-    <>
-      <h2 className="text-center text-5xl">ADD New Coffee </h2>
+    <section className="bg-[#F4F3F0]">
+      <h2 className="text-center text-5xl ">ADD New Coffee </h2>
       <form className="w-full px-10 p-5" onSubmit={handlerForm}>
         <div className="w-full px-10 p-5">
           <div className="grid grid-cols-2  w-full">
@@ -175,7 +175,7 @@ function App() {
           </button>
         </div>
       </form>
-    </>
+    </section>
   );
 }
 
