@@ -1,8 +1,9 @@
 import React from "react";
 import { FaEdit, FaRegEye, FaRegWindowClose } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const CoffeeCard = ({ coffee }) => {
+const CoffeeCard = ({ coffee,setCoffees,coffees }) => {
   const { _id, name, chef, suplier, taste, category, details, photo } = coffee;
   const handlerDelete = (id) => {
     // console.log(id);
@@ -24,6 +25,8 @@ const CoffeeCard = ({ coffee }) => {
             console.log(data);
             if (data.acknowledged > 0) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                const remaining=coffees.filter(cof=>cof._id!==id)
+                setCoffees(remaining)
             }
           });
       }
@@ -44,10 +47,10 @@ const CoffeeCard = ({ coffee }) => {
             </div>
             <div className="card-actions justify-end">
               <button className="btn btn-success">
-                <FaRegEye />
+                <Link to={`/coffees/${_id}`}><FaRegEye /></Link>
               </button>
               <button className="btn btn-dark">
-                <FaEdit />
+                <Link to={ `/update/${_id}`}><FaEdit /></Link>
               </button>
               <button
                 className="btn btn-error"
