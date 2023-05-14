@@ -1,33 +1,63 @@
+import Swal from "sweetalert2";
 import "./App.css";
+const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
 
 function App() {
-  const handlerForm=event=>{
+  const handlerForm = (event) => {
     event.preventDefault();
-    const form= event.target;
-    const name=form.name.value;
-    const chef=form.chef.value;
-    const photo=form.photo.value;
-    const taste=form.taste.value;
-    const suplier=form.suplier.value;
-    const details=form.details.value;
-    const category=form.category.value;
-    const coffee={name,chef,suplier,taste,category,details,photo}
+    const form = event.target;
+    const name = form.name.value;
+    const chef = form.chef.value;
+    const photo = form.photo.value;
+    const taste = form.taste.value;
+    const suplier = form.suplier.value;
+    const details = form.details.value;
+    const category = form.category.value;
+    const coffee = { name, chef, suplier, taste, category, details, photo };
     console.log(coffee);
-    fetch('http://localhost:5000/coffees',{
-      method:"POST",
-      headers:{
-        "content-type":"application/json"
-      },
-      body: JSON.stringify(coffee)
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      console.log(data);
-      if(acknowledged){
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ADD Coffee!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch("http://localhost:5000/coffees", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(coffee),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.acknowledged) {
+              Swal.fire("Added!", "Coffee has been added.", "success");
+            }
+          });
         
       }
-    })
-  }
+      else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Added Cancelled',
+        )
+      }
+    });
+  };
   return (
     <>
       <h2 className="text-center text-5xl">ADD New Coffee </h2>
@@ -124,24 +154,25 @@ function App() {
                 placeholder="Enter Coffee Details"
               />
             </div>
-
           </div>
           <div className="w-full px-3">
-              <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                htmlFor="grid-password"
-              >
-                Photo Url
-              </label>
-              <input
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-password"
-                type="text"
-                name="photo"
-                placeholder="Enter Photo URL"
-              />
-            </div>
-            <button type="submit" className="btn btn-block p-3 px-12">Add Coffee</button>
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="grid-password"
+            >
+              Photo Url
+            </label>
+            <input
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="grid-password"
+              type="text"
+              name="photo"
+              placeholder="Enter Photo URL"
+            />
+          </div>
+          <button type="submit" className="btn btn-block p-3 px-12">
+            Add Coffee
+          </button>
         </div>
       </form>
     </>
